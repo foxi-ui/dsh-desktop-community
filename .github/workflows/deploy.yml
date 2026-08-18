@@ -30,6 +30,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # 兜底：npm 偶发不安装平台原生依赖（npm/cli#4828），显式安装确保构建可用
+      - name: Ensure native platform binaries
+        run: npm install --no-save @rollup/rollup-linux-x64-gnu @esbuild/linux-x64
+
       - name: Build
         run: npm run build
 
