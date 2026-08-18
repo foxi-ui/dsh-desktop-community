@@ -1,35 +1,43 @@
 # dsh-desktop.bugduo.com 服务器部署操作手册
 
-> 适用：本人手动在云服务器上操作。服务器为腾讯云（`124.220.212.192`），系统按 Ubuntu/Debian 编写。
-> 全程约 10 分钟。站点为纯静态单页，Nginx 托管 `dist/` 构建产物，HTTPS 用 Let's Encrypt。
+> 适用：**全部操作在云服务器上执行**（通过云控制台 VNC / 网页终端，或你自有的 SSH 方式登录）。
+> 服务器为腾讯云（`124.220.212.192`），系统按 Ubuntu/Debian 编写，全程约 15 分钟。
+> 站点为纯静态单页，在服务器上构建后用 Nginx 托管，HTTPS 用 Let's Encrypt。
+> 本机（Mac）无需任何操作，无需配置 SSH 密钥。
 
 ---
 
-## 第 0 步 · 本地准备（在 Mac 上）
+## 第 0 步 · 服务器环境准备（一次性）
+
+登录服务器后（root / sudo 权限），安装 Node.js 22 并克隆、构建站点：
 
 ```bash
-cd /Users/maweiqiang/workspace/work_tools/dsh-web-site
+# 1) 安装 Node 22（任选一种方式）
+# 方式一：NodeSource
+curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+sudo apt install -y nodejs
+# 方式二：nvm
+# curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+# source ~/.bashrc && nvm install 22
+node -v    # 期望 v22.x
 
-# 1) 构建产物
-npm run build          # 生成 dist/
+# 2) 创建站点目录并克隆代码
+sudo mkdir -p /var/www/dsh
+sudo chown -R $USER:$USER /var/www/dsh
+cd /var/www/dsh
+git clone https://github.com/foxi-ui/dsh-desktop-community.git .
 
-# 2) 确认能 SSH 登录服务器（任选一种账号；如失败先解决第 0.1 节）
-ssh root@124.220.212.192 "echo 登录成功"
+# 3) 安装依赖并构建
+npm ci
+npm run build
+
+# 4) 把构建产物提升为站点根目录内容
+cp -a dist/* . && rm -rf dist
 ```
 
-### 0.1 若 SSH 登录失败
+完成后站点文件已就绪：`/var/www/dsh/index.html` 等。
 
-将本机公钥加入服务器授权（需先在服务器控制台用 VNC/密码登录一次，执行）：
-
-```bash
-# 在服务器上执行（把下面整行公钥追加到 authorized_keys）
-mkdir -p ~/.ssh && chmod 700 ~/.ssh
-chmod 600 ~/.ssh/authorized_keys
-```
-
----
-
-## 第 1 步 · 服务器安装软件（root / sudo）
+## 第 1 步 · 安装 Nginx 与 certbot
 
 ```bash
 sudo apt update
@@ -38,43 +46,13 @@ sudo apt install -y nginx certbot python3-certbot-nginx
 
 > 若为 CentOS：`sudo yum install -y nginx certbot python3-certbot-nginx`
 
-## 第 2 步 · 创建站点目录
-
-```bash
-sudo mkdir -p /var/www/dsh
-sudo chown -R $USER:$USER /var/www/dsh   # 方便直接用当前用户上传
-```
-
-## 第 3 步 · 上传站点文件（二选一）
-
-### 方式 A：本地 rsync 推送（推荐，在 Mac 上执行）
-
-```bash
-cd /Users/maweiqiang/workspace/work_tools/dsh-web-site
-rsync -avz --delete dist/ root@124.220.212.192:/var/www/dsh/
-```
-
-### 方式 B：服务器上拉取 GitHub 构建
-
-服务器安装 Node 22 后：
-
-```bash
-cd /var/www/dsh
-git clone https://github.com/foxi-ui/dsh-desktop-community.git .
-npm ci && npm run build
-# 把 dist 内容提升到站点根目录
-sudo cp -a dist/* . && sudo rm -rf dist
-```
-
-> 推荐方式 A：产物与本地一致，无需服务器装 Node。
-
-## 第 4 步 · 写 Nginx 配置
+## 第 2 步 · 写 Nginx 配置
 
 ```bash
 sudo vi /etc/nginx/conf.d/dsh-desktop.bugduo.com.conf
 ```
 
-粘贴以下完整内容（先不含证书路径，第 6 步 certbot 会自动补齐；也可直接粘贴，certbot 会覆盖）：
+粘贴以下完整内容（证书路径第 4 步 certbot 会自动补齐）：
 
 ```nginx
 # ---------- HTTP → HTTPS ----------
@@ -92,7 +70,7 @@ server {
     http2 on;
     server_name dsh-desktop.bugduo.com;
 
-    # 第 6 步 certbot 会自动生成并替换为真实证书路径
+    # 第 4 步 certbot 会自动生成并替换为真实证书路径
     ssl_certificate     /etc/letsencrypt/live/dsh-desktop.bugduo.com/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/dsh-desktop.bugduo.com/privkey.pem;
 
@@ -124,35 +102,34 @@ server {
 }
 ```
 
-> 若第 6 步先执行 certbot，`ssl_certificate` 两行会被自动写入，无需手动改。
-
-校验配置：
+校验并生效：
 
 ```bash
 sudo nginx -t && sudo systemctl reload nginx
 ```
 
-## 第 5 步 · 先验证 HTTP 可访问（证书未签前会 301 到 https 报错属正常）
+## 第 3 步 · 验证 HTTP 可访问
 
 ```bash
 curl -I http://dsh-desktop.bugduo.com
 # 期望：HTTP/1.1 301 ... Location: https://dsh-desktop.bugduo.com/
 ```
 
-## 第 6 步 · 签发 HTTPS 证书
+> 证书未签发前访问 https 报错属正常，继续第 4 步。
+
+## 第 4 步 · 签发 HTTPS 证书
 
 ```bash
 sudo certbot --nginx -d dsh-desktop.bugduo.com --agree-tos --redirect -m 你的邮箱@example.com
 ```
 
-- `--redirect` 自动把 HTTP 跳转 HTTPS
-- 自动续期由系统 timer 负责，验证一次：
+自动续期由系统 timer 负责，验证一次：
 
 ```bash
 sudo certbot renew --dry-run
 ```
 
-## 第 7 步 · 验证上线
+## 第 5 步 · 上线验证
 
 ```bash
 # 1) 主页
@@ -170,22 +147,24 @@ echo | openssl s_client -connect dsh-desktop.bugduo.com:443 -servername dsh-desk
 
 ---
 
-## 日常更新（下次发新版）
+## 日常更新（发布新版本，服务器上执行）
 
 ```bash
-# Mac 上：构建 + 推送（一步到位）
-cd /Users/maweiqiang/workspace/work_tools/dsh-web-site
-rsync -avz --delete dist/ root@124.220.212.192:/var/www/dsh/
-# 静态文件无需 reload nginx；若改了 nginx 配置则 sudo systemctl reload nginx
+cd /var/www/dsh
+git pull
+npm ci && npm run build
+cp -a dist/* . && rm -rf dist
 ```
+
+静态文件无需 reload nginx；若改了 nginx 配置则 `sudo systemctl reload nginx`。
 
 ## 回滚
 
 ```bash
-# 发布前备份（建议每次发布前执行）
-sudo cp -a /var/www/dsh /var/www/dsh.bak-$(date +%s)
+# 更新前备份（建议每次更新前执行）
+cp -a /var/www/dsh /var/www/dsh.bak-$(date +%s)
 # 出问题时恢复
-sudo rm -rf /var/www/dsh && sudo cp -a /var/www/dsh.bak-XXX /var/www/dsh
+rm -rf /var/www/dsh && cp -a /var/www/dsh.bak-XXX /var/www/dsh
 # 备用：GitHub Pages 站点 foxi-ui.github.io/dsh-desktop-community 始终在线
 ```
 
@@ -196,7 +175,7 @@ sudo rm -rf /var/www/dsh && sudo cp -a /var/www/dsh.bak-XXX /var/www/dsh
 | 问题 | 处理 |
 | --- | --- |
 | 80/443 打不开 | 腾讯云控制台 → 安全组 → 放行 80、443 入站 |
-| `certbot` 报域名验证失败 | 确认 DNS 已生效：`dig dsh-desktop.bugduo.com` 应返回 124.220.212.192 |
-| 图片/字体 404 | 确认 rsync 上传完整、目录为 `/var/www/dsh` |
+| certbot 报域名验证失败 | 确认 DNS：`dig dsh-desktop.bugduo.com` 应返回 124.220.212.192 |
+| 图片/字体 404 | 确认构建产物已提升到 `/var/www/dsh` 根目录（`cp -a dist/* .`） |
 | 证书快到期 | `sudo certbot renew --dry-run` 检查；timer 自动续期 |
-| 想换部署方式 | 仓库 `DEPLOY.md` 有 GitHub Actions 自动部署（Secrets 配 `DEPLOY_KEY` 等）方案 |
+| 构建失败 | `npm ci` 报错先 `rm -rf node_modules package-lock.json && npm install` 重试（npm 平台依赖已知问题） |
