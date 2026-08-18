@@ -22,9 +22,9 @@ sudo apt install -y nodejs
 node -v    # 期望 v22.x
 
 # 2) 创建站点目录并克隆代码
-sudo mkdir -p /var/www/dsh
-sudo chown -R $USER:$USER /var/www/dsh
-cd /var/www/dsh
+sudo mkdir -p /var/www/dsh-desktop
+sudo chown -R $USER:$USER /var/www/dsh-desktop
+cd /var/www/dsh-desktop
 git clone https://github.com/foxi-ui/dsh-desktop-community.git .
 
 # 3) 安装依赖并构建
@@ -35,7 +35,7 @@ npm run build
 cp -a dist/* . && rm -rf dist
 ```
 
-完成后站点文件已就绪：`/var/www/dsh/index.html` 等。
+完成后站点文件已就绪：`/var/www/dsh-desktop/index.html` 等。
 
 ## 第 1 步 · 安装 Nginx 与 certbot
 
@@ -74,7 +74,7 @@ server {
     ssl_certificate     /etc/letsencrypt/live/dsh-desktop.bugduo.com/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/dsh-desktop.bugduo.com/privkey.pem;
 
-    root  /var/www/dsh;
+    root  /var/www/dsh-desktop;
     index index.html;
 
     location / {
@@ -150,7 +150,7 @@ echo | openssl s_client -connect dsh-desktop.bugduo.com:443 -servername dsh-desk
 ## 日常更新（发布新版本，服务器上执行）
 
 ```bash
-cd /var/www/dsh
+cd /var/www/dsh-desktop
 git pull
 npm ci && npm run build
 cp -a dist/* . && rm -rf dist
@@ -162,9 +162,9 @@ cp -a dist/* . && rm -rf dist
 
 ```bash
 # 更新前备份（建议每次更新前执行）
-cp -a /var/www/dsh /var/www/dsh.bak-$(date +%s)
+cp -a /var/www/dsh-desktop /var/www/dsh-desktop.bak-$(date +%s)
 # 出问题时恢复
-rm -rf /var/www/dsh && cp -a /var/www/dsh.bak-XXX /var/www/dsh
+rm -rf /var/www/dsh-desktop && cp -a /var/www/dsh-desktop.bak-XXX /var/www/dsh-desktop
 # 备用：GitHub Pages 站点 foxi-ui.github.io/dsh-desktop-community 始终在线
 ```
 
@@ -176,6 +176,6 @@ rm -rf /var/www/dsh && cp -a /var/www/dsh.bak-XXX /var/www/dsh
 | --- | --- |
 | 80/443 打不开 | 腾讯云控制台 → 安全组 → 放行 80、443 入站 |
 | certbot 报域名验证失败 | 确认 DNS：`dig dsh-desktop.bugduo.com` 应返回 124.220.212.192 |
-| 图片/字体 404 | 确认构建产物已提升到 `/var/www/dsh` 根目录（`cp -a dist/* .`） |
+| 图片/字体 404 | 确认构建产物已提升到 `/var/www/dsh-desktop` 根目录（`cp -a dist/* .`） |
 | 证书快到期 | `sudo certbot renew --dry-run` 检查；timer 自动续期 |
 | 构建失败 | `npm ci` 报错先 `rm -rf node_modules package-lock.json && npm install` 重试（npm 平台依赖已知问题） |
