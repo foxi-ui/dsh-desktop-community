@@ -1,0 +1,100 @@
+/* ---------- CTA（深色） ---------- */
+.ds-cta-wrap {
+  position: relative;
+  overflow: hidden;
+  background: var(--ds-color-bg-dark);
+  color: #fff;
+  margin-top: var(--ds-space-6);
+}
+.ds-cta-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.ds-cta-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.28;
+}
+.ds-cta-blob-1 {
+  width: 520px;
+  height: 520px;
+  left: 8%;
+  bottom: -160px;
+  background: radial-gradient(circle, #4d6bfe, transparent 65%);
+}
+.ds-cta-blob-2 {
+  width: 420px;
+  height: 420px;
+  left: 42%;
+  bottom: -120px;
+  background: radial-gradient(circle, #3a65c2, transparent 65%);
+}
+.ds-cta-blob-3 {
+  width: 460px;
+  height: 460px;
+  right: 6%;
+  bottom: -140px;
+  background: radial-gradient(circle, #73a3d2, transparent 65%);
+  opacity: 0.22;
+}
+
+.ds-cta {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: var(--ds-space-10) 0 var(--ds-space-11);
+  scroll-margin-top: 80px;
+}
+.ds-cta-title {
+  color: #fff;
+}
+.ds-cta-desc {
+  max-width: 652px;
+  margin-top: var(--ds-space-5);
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.75;
+}
+.ds-cta-btns {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-space-4);
+  margin-top: var(--ds-space-6);
+}
+.ds-cta-btn.ds-btn-primary {
+  background: #fff;
+  color: #1a1615;
+}
+.ds-cta-btn.ds-btn-primary::after {
+  background: rgba(0, 0, 0, 0.08);
+}
+.ds-cta-btn.ds-btn-secondary {
+  background: hsla(0, 0%, 100%, 0.08);
+  color: #fff;
+  border-color: hsla(0, 0%, 100%, 0.22);
+}
+.ds-cta-btn.ds-btn-secondary:hover {
+  border-color: hsla(0, 0%, 100%, 0.45);
+}
+.ds-cta-btn.ds-btn-secondary::after {
+  background: hsla(0, 0%, 100%, 0.12);
+}
+.ds-cta-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: var(--ds-space-6);
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  transition: color 0.2s ease;
+}
+.ds-cta-more:hover {
+  color: #fff;
+}

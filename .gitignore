@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.npm-cache/
+.check-app/
+.check-ssr/
+ssr-smoke.mjs
+.DS_Store
+*.log

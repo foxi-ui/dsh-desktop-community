@@ -1,0 +1,124 @@
+/* ---------- 开始使用 ---------- */
+.ds-gs-grid {
+  margin-top: var(--ds-space-8);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--ds-space-6);
+  align-items: stretch;
+}
+@media (min-width: 1024px) {
+  .ds-gs-grid {
+    grid-template-columns: 1.05fr 1fr;
+  }
+}
+
+.ds-gs-cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-5);
+}
+
+.ds-gs-card {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-3);
+  border-radius: var(--ds-radius-media);
+  background: var(--ds-color-bg-surface-3);
+  border: 1px solid var(--ds-color-border-default);
+  padding: var(--ds-space-6);
+}
+.ds-gs-card h3 {
+  color: var(--ds-color-text-primary);
+}
+.ds-gs-sub {
+  color: var(--ds-color-text-description);
+}
+
+.ds-gs-download {
+  border-color: rgba(77, 107, 254, 0.3);
+  background:
+    linear-gradient(180deg, rgba(77, 107, 254, 0.05), rgba(77, 107, 254, 0.01)),
+    var(--ds-color-bg-surface-3);
+}
+.ds-gs-download-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.ds-gs-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 13px;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+.ds-gs-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.ds-gs-tag {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--ds-color-brand);
+  border-radius: 100px;
+  padding: 4px 11px;
+  white-space: nowrap;
+}
+.ds-gs-desc {
+  color: var(--ds-color-text-description);
+  line-height: 1.7;
+}
+.ds-gs-download-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-space-3);
+  margin-top: var(--ds-space-2);
+}
+.ds-gs-points {
+  list-style: none;
+  margin: var(--ds-space-2) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ds-gs-points li {
+  position: relative;
+  padding-left: 18px;
+  font-size: 13.5px;
+  color: var(--ds-color-text-description);
+  line-height: 1.6;
+}
+.ds-gs-points li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 8px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ds-color-brand);
+  opacity: 0.7;
+}
+
+.ds-gs-code {
+  margin-top: var(--ds-space-1);
+}
+.ds-gs-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--ds-color-text-primary);
+  transition: color 0.2s ease;
+  width: fit-content;
+}
+.ds-gs-link:hover {
+  color: var(--ds-color-brand);
+}

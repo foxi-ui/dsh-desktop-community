@@ -1,0 +1,203 @@
+/* ---------- 设计思路 ---------- */
+.ds-arch-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-4);
+}
+.ds-arch-head h2 {
+  color: var(--ds-color-text-primary);
+  max-width: 680px;
+  white-space: normal;
+}
+
+/* 桌面布局 */
+.ds-arch-desktop {
+  display: none;
+  grid-template-columns: 42fr 58fr;
+  gap: var(--ds-space-9);
+  width: 100%;
+  margin-top: var(--ds-space-3);
+}
+@media (min-width: 900px) {
+  .ds-arch-desktop {
+    display: grid;
+  }
+}
+
+.ds-arch-items {
+  display: flex;
+  flex-direction: column;
+}
+.ds-arch-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--ds-space-3);
+  min-height: 35vh;
+  padding: 11vh 0;
+  border-bottom: 1px solid var(--ds-color-border-divider);
+}
+.ds-arch-item:last-child {
+  border-bottom: none;
+}
+.ds-arch-item-head {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-3);
+}
+.ds-arch-item-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  background: var(--ds-color-bg-overlay);
+  border: 1px solid var(--ds-color-border-default);
+  color: var(--ds-color-brand);
+  flex-shrink: 0;
+}
+.ds-arch-item-title {
+  color: var(--ds-color-text-primary);
+  font-size: 22px !important;
+  font-weight: 400 !important;
+}
+.ds-arch-item-desc {
+  color: var(--ds-color-text-description);
+  line-height: 1.7;
+  max-width: 520px;
+}
+
+.ds-arch-visual {
+  position: sticky;
+  top: 110px;
+  align-self: start;
+  min-width: 0;
+  max-width: 760px;
+}
+
+/* 移动端堆叠 */
+.ds-arch-mobile {
+  margin-top: var(--ds-space-7);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-8);
+}
+@media (min-width: 900px) {
+  .ds-arch-mobile {
+    display: none;
+  }
+}
+.ds-arch-items.is-stacked .ds-arch-item {
+  min-height: 0;
+  padding: 0;
+  padding-bottom: var(--ds-space-6);
+  margin-bottom: var(--ds-space-6);
+}
+.ds-arch-mobile .ds-arch-visual {
+  position: static;
+  max-width: none;
+}
+
+/* ---------- 更新终端 ---------- */
+.ut-window {
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #101113;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    0 24px 48px -12px rgba(16, 17, 19, 0.35);
+}
+.ut-titlebar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: #181a1f;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.ut-dots {
+  display: flex;
+  gap: 6px;
+}
+.ut-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #2a2d34;
+}
+.ut-dots span:first-child {
+  background: #ff5f57;
+}
+.ut-dots span:nth-child(2) {
+  background: #febc2e;
+}
+.ut-dots span:nth-child(3) {
+  background: #28c840;
+}
+.ut-title {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: var(--ds-font-sans);
+}
+.ut-body {
+  padding: 18px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  font-family: var(--ds-font-mono);
+  font-size: 12.5px;
+  line-height: 1.6;
+  min-height: 320px;
+  justify-content: center;
+}
+.ut-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  color: rgba(255, 255, 255, 0.85);
+}
+.ut-prompt {
+  color: var(--ds-color-brand);
+  user-select: none;
+  flex-shrink: 0;
+}
+.ut-cmd {
+  color: rgba(255, 255, 255, 0.9);
+}
+.ut-dim {
+  color: rgba(255, 255, 255, 0.4);
+}
+.ut-ok {
+  color: rgba(255, 255, 255, 0.65);
+}
+.ut-ok-mark {
+  color: #28c840;
+  flex-shrink: 0;
+}
+.ut-hl {
+  color: #73a3d2;
+}
+.ut-gap {
+  margin-top: 4px;
+}
+.ut-cursor {
+  margin-top: 6px;
+}
+.ut-block {
+  width: 8px;
+  height: 15px;
+  background: rgba(255, 255, 255, 0.8);
+  animation: ut-blink 1.1s steps(2) infinite;
+}
+@keyframes ut-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}

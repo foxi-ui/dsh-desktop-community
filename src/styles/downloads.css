@@ -1,0 +1,330 @@
+/* ---------- 通用 section ---------- */
+.ds-section {
+  position: relative;
+  padding: var(--ds-space-9) 0;
+  scroll-margin-top: 72px;
+}
+@media (min-width: 768px) {
+  .ds-section {
+    padding: var(--ds-space-10) 0;
+  }
+}
+
+.ds-section-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ds-space-4);
+  text-align: center;
+  max-width: 820px;
+  margin: 0 auto;
+}
+.ds-section-head h2 {
+  color: var(--ds-color-text-primary);
+}
+.ds-section-desc {
+  max-width: 680px;
+  color: var(--ds-color-text-description);
+  line-height: 1.75;
+}
+
+/* ---------- 下载区 ---------- */
+.ds-platforms {
+  margin-top: var(--ds-space-8);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--ds-space-5);
+}
+@media (min-width: 900px) {
+  .ds-platforms {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.ds-platform {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--ds-radius-media);
+  background: var(--ds-color-bg-surface-3);
+  border: 1px solid var(--ds-color-border-default);
+  padding: var(--ds-space-5);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+.ds-platform:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--ds-shadow-card);
+}
+.ds-platform.is-primary {
+  border-color: rgba(77, 107, 254, 0.35);
+  background:
+    linear-gradient(180deg, rgba(77, 107, 254, 0.06), rgba(77, 107, 254, 0.02)),
+    var(--ds-color-bg-surface-3);
+}
+.ds-platform.is-primary::before {
+  content: '推荐';
+  position: absolute;
+  top: -11px;
+  left: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: var(--ds-font-sans);
+  color: #fff;
+  background: var(--ds-color-brand);
+  border-radius: 100px;
+  padding: 3px 10px;
+  box-shadow: 0 4px 12px rgba(77, 107, 254, 0.4);
+}
+.ds-platform.is-primary {
+  position: relative;
+}
+
+.ds-platform-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.ds-platform-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ds-color-bg-overlay);
+  border: 1px solid var(--ds-color-border-default);
+  color: var(--ds-color-text-primary);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+.ds-platform-name {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.ds-platform-name h3 {
+  color: var(--ds-color-text-primary);
+}
+.ds-platform-arch {
+  font-size: 12px;
+  color: var(--ds-color-text-placeholder);
+}
+.ds-platform-status {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 100px;
+  white-space: nowrap;
+}
+.ds-platform-status.ok {
+  color: #1a7f37;
+  background: rgba(40, 200, 64, 0.12);
+}
+.ds-platform-status.soon {
+  color: var(--ds-color-text-description);
+  background: var(--ds-color-bg-surface-5);
+}
+
+.ds-platform-body {
+  margin-top: var(--ds-space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-4);
+  flex: 1;
+}
+.ds-platform-os {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 13px;
+}
+.ds-platform-os-label {
+  color: var(--ds-color-text-placeholder);
+}
+.ds-platform-os-value {
+  color: var(--ds-color-text-primary);
+  font-weight: 500;
+  text-align: right;
+}
+
+.ds-file-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-3);
+}
+.ds-file {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid var(--ds-color-border-default);
+  border-radius: var(--ds-radius-media);
+  background: var(--ds-color-bg-surface-4);
+  padding: var(--ds-space-3) var(--ds-space-4);
+}
+.ds-file-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ds-file-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ds-color-text-primary);
+}
+.ds-file-desc {
+  font-size: 12.5px;
+  color: var(--ds-color-text-description);
+}
+.ds-file-side {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.ds-file-size {
+  font-size: 12px;
+  color: var(--ds-color-text-placeholder);
+  font-family: var(--ds-font-mono);
+}
+.ds-file-sha {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  border-top: 1px dashed var(--ds-color-border-divider);
+  padding-top: 8px;
+}
+.ds-file-sha-label {
+  font-size: 11px;
+  color: var(--ds-color-text-placeholder);
+  font-weight: 500;
+}
+.ds-file-sha-value {
+  font-family: var(--ds-font-mono);
+  font-size: 11px;
+  color: var(--ds-color-text-description);
+  word-break: break-all;
+  flex: 1;
+  min-width: 0;
+}
+.ds-platform-note {
+  margin-top: auto;
+  font-size: 12.5px;
+  color: var(--ds-color-text-placeholder);
+  line-height: 1.6;
+}
+
+/* ---------- 安装说明 ---------- */
+.ds-install {
+  margin-top: var(--ds-space-8);
+  border-radius: var(--ds-radius-panel);
+  border: 1px solid var(--ds-color-border-default);
+  background: var(--ds-color-bg-surface-3);
+  overflow: hidden;
+}
+.ds-install-tabs {
+  display: flex;
+  gap: var(--ds-space-1);
+  padding: 6px;
+  border-bottom: 1px solid var(--ds-color-border-divider);
+}
+.ds-install-tab {
+  padding: 8px 18px;
+  border-radius: var(--ds-radius-pill);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ds-color-text-description);
+  transition: all 0.2s ease;
+}
+.ds-install-tab:hover {
+  color: var(--ds-color-text-primary);
+}
+.ds-install-tab.is-active {
+  background: var(--ds-color-bg-overlay);
+  color: var(--ds-color-text-primary);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+.ds-install-panel {
+  padding: var(--ds-space-6);
+}
+.ds-install-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--ds-space-4);
+  counter-reset: step;
+}
+@media (min-width: 768px) {
+  .ds-install-steps {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.ds-install-step {
+  display: flex;
+  gap: 14px;
+}
+.ds-step-num {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--ds-color-bg-overlay);
+  border: 1px solid var(--ds-color-border-default);
+  color: var(--ds-color-brand);
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--ds-font-mono);
+}
+.ds-install-step h4 {
+  color: var(--ds-color-text-primary);
+  font-size: 15px;
+  margin-bottom: 2px;
+}
+.ds-install-step-desc {
+  color: var(--ds-color-text-description);
+}
+.ds-install-tip {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-top: var(--ds-space-5);
+  padding: var(--ds-space-3) var(--ds-space-4);
+  border-radius: var(--ds-radius-media);
+  background: rgba(77, 107, 254, 0.07);
+  border: 1px solid rgba(77, 107, 254, 0.18);
+  color: var(--ds-color-text-description);
+}
+.ds-install-tip svg {
+  color: var(--ds-color-brand);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ---------- 底部链接 ---------- */
+.ds-downloads-foot {
+  margin-top: var(--ds-space-6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-space-2);
+  flex-wrap: wrap;
+}
+.ds-downloads-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--ds-color-text-primary);
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+.ds-downloads-link:hover {
+  color: var(--ds-color-brand);
+}
