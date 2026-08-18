@@ -35,7 +35,7 @@ export default function Header() {
         <div className="ds-header-bar">
           <a className="ds-brand" href="#top" onClick={() => setMenuOpen(false)}>
             <span className="ds-brand-icon">
-              <img src="/icon.png" alt="DeepSeek Harness Desktop" />
+              <img src={`${import.meta.env.BASE_URL}icon.png`} alt="DeepSeek Harness Desktop" />
             </span>
             <span className="ds-brand-word">
               <span className="ds-brand-name">DeepSeek Harness Desktop</span>
@@ -90,7 +90,7 @@ export default function Header() {
         <div className="ds-mobile-menu-header">
           <a className="ds-brand" href="#top" onClick={() => setMenuOpen(false)}>
             <span className="ds-brand-icon">
-              <img src="/icon.png" alt="DeepSeek Harness Desktop" />
+              <img src={`${import.meta.env.BASE_URL}icon.png`} alt="DeepSeek Harness Desktop" />
             </span>
             <span className="ds-brand-word">
               <span className="ds-brand-name">DeepSeek Harness Desktop</span>

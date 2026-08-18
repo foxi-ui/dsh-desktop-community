@@ -67,7 +67,7 @@ export default function GettingStarted() {
           <div className="ds-gs-card ds-gs-download">
             <div className="ds-gs-download-head">
               <span className="ds-gs-icon">
-                <img src="/icon.png" alt="" />
+                <img src={`${import.meta.env.BASE_URL}icon.png`} alt="" />
               </span>
               <div>
                 <h3 className="ds-text-subtitle">下载桌面版</h3>

@@ -23,7 +23,7 @@ export default function WindowMock() {
         {/* 侧边栏 */}
         <aside className="wm-sidebar">
           <div className="wm-logo">
-            <img src="/icon.png" alt="" />
+            <img src={`${import.meta.env.BASE_URL}icon.png`} alt="" />
             <span className="wm-logo-text">
               DeepSeek
               <br />
