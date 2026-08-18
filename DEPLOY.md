@@ -1,4 +1,4 @@
-# dsh.bugduo.com 服务器部署操作手册
+# dsh-desktop.bugduo.com 服务器部署操作手册
 
 > 适用：本人手动在云服务器上操作。服务器为腾讯云（`124.220.212.192`），系统按 Ubuntu/Debian 编写。
 > 全程约 10 分钟。站点为纯静态单页，Nginx 托管 `dist/` 构建产物，HTTPS 用 Let's Encrypt。
@@ -71,7 +71,7 @@ sudo cp -a dist/* . && sudo rm -rf dist
 ## 第 4 步 · 写 Nginx 配置
 
 ```bash
-sudo vi /etc/nginx/conf.d/dsh.bugduo.com.conf
+sudo vi /etc/nginx/conf.d/dsh-desktop.bugduo.com.conf
 ```
 
 粘贴以下完整内容（先不含证书路径，第 6 步 certbot 会自动补齐；也可直接粘贴，certbot 会覆盖）：
@@ -81,7 +81,7 @@ sudo vi /etc/nginx/conf.d/dsh.bugduo.com.conf
 server {
     listen 80;
     listen [::]:80;
-    server_name dsh.bugduo.com;
+    server_name dsh-desktop.bugduo.com;
     return 301 https://$host$request_uri;
 }
 
@@ -90,11 +90,11 @@ server {
     listen 443 ssl;
     listen [::]:443 ssl;
     http2 on;
-    server_name dsh.bugduo.com;
+    server_name dsh-desktop.bugduo.com;
 
     # 第 6 步 certbot 会自动生成并替换为真实证书路径
-    ssl_certificate     /etc/letsencrypt/live/dsh.bugduo.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/dsh.bugduo.com/privkey.pem;
+    ssl_certificate     /etc/letsencrypt/live/dsh-desktop.bugduo.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/dsh-desktop.bugduo.com/privkey.pem;
 
     root  /var/www/dsh;
     index index.html;
@@ -135,14 +135,14 @@ sudo nginx -t && sudo systemctl reload nginx
 ## 第 5 步 · 先验证 HTTP 可访问（证书未签前会 301 到 https 报错属正常）
 
 ```bash
-curl -I http://dsh.bugduo.com
-# 期望：HTTP/1.1 301 ... Location: https://dsh.bugduo.com/
+curl -I http://dsh-desktop.bugduo.com
+# 期望：HTTP/1.1 301 ... Location: https://dsh-desktop.bugduo.com/
 ```
 
 ## 第 6 步 · 签发 HTTPS 证书
 
 ```bash
-sudo certbot --nginx -d dsh.bugduo.com --agree-tos --redirect -m 你的邮箱@example.com
+sudo certbot --nginx -d dsh-desktop.bugduo.com --agree-tos --redirect -m 你的邮箱@example.com
 ```
 
 - `--redirect` 自动把 HTTP 跳转 HTTPS
@@ -156,17 +156,17 @@ sudo certbot renew --dry-run
 
 ```bash
 # 1) 主页
-curl -I https://dsh.bugduo.com                        # 期望 200
-curl -s https://dsh.bugduo.com | grep -o "<title>[^<]*"   # 期望 DeepSeek Harness Desktop
+curl -I https://dsh-desktop.bugduo.com                        # 期望 200
+curl -s https://dsh-desktop.bugduo.com | grep -o "<title>[^<]*"   # 期望 DeepSeek Harness Desktop
 # 2) 关键资源
-curl -I https://dsh.bugduo.com/fonts/fonts.css        # 期望 200
-curl -I https://dsh.bugduo.com/icon.png               # 期望 200
+curl -I https://dsh-desktop.bugduo.com/fonts/fonts.css        # 期望 200
+curl -I https://dsh-desktop.bugduo.com/icon.png               # 期望 200
 # 3) 证书
-echo | openssl s_client -connect dsh.bugduo.com:443 -servername dsh.bugduo.com 2>/dev/null \
+echo | openssl s_client -connect dsh-desktop.bugduo.com:443 -servername dsh-desktop.bugduo.com 2>/dev/null \
   | openssl x509 -noout -issuer -dates
 ```
 
-浏览器打开 **https://dsh.bugduo.com**：首屏渲染、字体、图标、滚动动画正常即可。
+浏览器打开 **https://dsh-desktop.bugduo.com**：首屏渲染、字体、图标、滚动动画正常即可。
 
 ---
 
@@ -196,7 +196,7 @@ sudo rm -rf /var/www/dsh && sudo cp -a /var/www/dsh.bak-XXX /var/www/dsh
 | 问题 | 处理 |
 | --- | --- |
 | 80/443 打不开 | 腾讯云控制台 → 安全组 → 放行 80、443 入站 |
-| `certbot` 报域名验证失败 | 确认 DNS 已生效：`dig dsh.bugduo.com` 应返回 124.220.212.192 |
+| `certbot` 报域名验证失败 | 确认 DNS 已生效：`dig dsh-desktop.bugduo.com` 应返回 124.220.212.192 |
 | 图片/字体 404 | 确认 rsync 上传完整、目录为 `/var/www/dsh` |
 | 证书快到期 | `sudo certbot renew --dry-run` 检查；timer 自动续期 |
 | 想换部署方式 | 仓库 `DEPLOY.md` 有 GitHub Actions 自动部署（Secrets 配 `DEPLOY_KEY` 等）方案 |
